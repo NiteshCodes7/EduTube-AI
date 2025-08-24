@@ -11,7 +11,7 @@ const Navbar = () => {
   }
 
   return (
-    <section className='bg-gradient-to-b from-black/90 via-black/70 to-transparent fixed w-full h-[150px] z-50 p-2'>
+    <section className="bg-transparent fixed top-0 left-0 w-full backdrop-blur-lg z-50 p-2">
       <div className='flex justify-between items-center px-4'>
         {/* Logo Section */}
         <div className="flex items-center">

@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme{
+  --color-lightGray: #7A7A7A;
+  --color-customPurple: #5D2CA8;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -41,6 +46,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --font-dmSans: var(--font-dmSans);
+  --font-inter: var(--font-inter);
 }
 
 :root {
@@ -111,6 +119,31 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+.h1{
+  font-size: 54px;
+}
+
+@keyframes wiggleScale {
+  0%, 100% {
+    transform: rotate(-5deg) scale(1);
+  }
+  25% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(-3deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(3deg) scale(1.05);
+  }
+}
+
+.animate-wiggleScale {
+  animation: wiggleScale 1.5s ease-in-out infinite;
+}
+
+
 
 @layer base {
   * {
