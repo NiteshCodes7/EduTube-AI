@@ -76,7 +76,7 @@ export default function OtpInput({
               <InputOTPSlot
                 key={idx}
                 index={idx}
-                className="w-10 h-10 md:w-16 md:h-16 text-3xl text-rose-400"
+                className="w-10 h-10 md:w-16 md:h-16 text-3xl text-customPurple"
               />
             ))}
           </InputOTPGroup>
@@ -86,7 +86,7 @@ export default function OtpInput({
           <Button
             disabled={otp.length !== 6}
             onClick={handleSubmit}
-            className="cursor-pointer"
+            className="cursor-pointer bg-customPurple"
           >
             Verify
           </Button>
@@ -94,12 +94,12 @@ export default function OtpInput({
 
         <div className="text-center text-sm text-gray-700">
           <p>
-            Didn't receive a code?{" "}
+            Didn&apos;t receive a code?{" "}
             <Button
               type="button"
               variant="link"
               onClick={handleResendOtp}
-              className="text-rose-500 m-0 p-0 hover:underline"
+              className="text-customPurple m-0 p-0 hover:underline cursor-pointer"
             >
               Resend Code
             </Button>

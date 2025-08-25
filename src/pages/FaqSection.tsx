@@ -9,6 +9,7 @@ const FaqSection = () => {
 
   return (
     <section
+      id="faq"
       className="flex justify-center items-center h-auto py-12 sm:py-16 px-4 sm:px-6 text-white"
       style={{
         background:

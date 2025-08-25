@@ -78,8 +78,8 @@ export default function SigninPage() {
         <h2 className="text-3xl font-bold text-gray-900 mb-1">
           Login to your account
         </h2>
-        <p className="text-sm text-gray-500">
-          Explore Essentia.ai and summarize your PDFs smarter.
+        <p className="text-sm text-gray-500 mt-2">
+          Explore EduTube and summarize YouTube videoes in seconds.
         </p>
       </div>
 
@@ -144,7 +144,7 @@ export default function SigninPage() {
       <Button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full rounded-full bg-gradient-to-br from-customPurple to-black hover:from-black hover:to-customPurple"
+        className="w-full rounded-full bg-gradient-to-br from-customPurple to-black hover:from-black hover:to-customPurple cursor-pointer"
       >
         {loading ? (
           <Loader2 className="animate-spin mr-2 h-4 w-4" />

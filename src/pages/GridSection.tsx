@@ -26,6 +26,7 @@ const GridSection = () => {
 
   return (
     <section
+      id="features"
       className="flex flex-col h-auto justify-center items-center py-16 sm:py-20 px-4 sm:px-6"
       style={{
           background: "linear-gradient(to bottom, #000000 0%, #000000 30%, #5D2CA8 100%)"

@@ -49,7 +49,8 @@ export async function GET(req: Request) {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const primaryEmail = emails.find((e: any) => e.primary)?.email;
+    type GithubEmail = { email: string; primary: boolean; verified: boolean; visibility: string | null };
+    const primaryEmail = (emails as GithubEmail[]).find((e) => e.primary)?.email;
 
     // 3. Save to DB
     let user = await User.findOne({ email: primaryEmail });

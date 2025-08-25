@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className="flex flex-col md:flex-row min-h-screen bg-slate-300/30 animate-in fade-in slide-in-from-bottom-6">
 
       {/* Left Side: Gradient branding */}
-      <div className="hidden md:flex md:flex-col md:w-1/2 bg-gradient-to-br from-customPurple to-black text-white p-10 justify-center space-y-6 relative transition-all duration-300 rounded-r-4xl h-screen">
+      <div className="hidden md:flex md:flex-col md:w-1/2 bg-gradient-to-br from-customPurple to-black text-white p-10 justify-center space-y-6 relative transition-all duration-300 h-screen">
         <div className="flex flex-col items-center text-center space-y-2">
           <Image
             src={"/assets/EdutubeLogoDekstop.png"}

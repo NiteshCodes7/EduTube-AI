@@ -70,6 +70,7 @@ const PricingSection = () => {
 
   return (
     <section
+      id="pricing"
       className="flex flex-col justify-center items-center h-auto overflow-auto"
       style={{
         background:

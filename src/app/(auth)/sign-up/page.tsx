@@ -114,8 +114,8 @@ export default function SignupPage() {
         <h2 className="text-3xl font-bold text-gray-900">
           Create your account
         </h2>
-        <p className="text-sm text-gray-500">
-          Join Essentia.ai and summarize your PDFs smarter.
+        <p className="text-sm text-gray-500 mt-2">
+          Join EduTube family and summarize Youtube videoes in seconds.
         </p>
       </div>
 
@@ -221,7 +221,7 @@ export default function SignupPage() {
         <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full mt-2 rounded-full bg-gradient-to-br from-customPurple to-black hover:from-black hover:to-customPurple"
+          className="w-full mt-2 rounded-full bg-gradient-to-br from-customPurple to-black hover:from-black hover:to-customPurple cursor-pointer"
         >
           {loading ? (
             <Loader2 className="animate-spin mr-2 h-4 w-4" />
