@@ -1,16 +1,16 @@
 export const faqList = [
   {
-    question: "What is EduTube AI?",
+    question: "What is EduTube?",
     answer:
-      "EduTube AI is an AI-powered YouTube summarizer that helps students, educators, and professionals quickly extract key insights, mind maps, and study notes from any video.",
+      "EduTube is an AI-powered YouTube summarizer that helps students, educators, and professionals quickly extract key insights, mind maps, and study notes from any video.",
   },
   {
-    question: "Is EduTube AI free to use?",
+    question: "Is EduTube free to use?",
     answer:
       "Yes! We offer a Free plan with limited daily summaries and essential features. For unlimited usage and advanced tools, you can upgrade to our paid plans.",
   },
   {
-    question: "Who can benefit from EduTube AI?",
+    question: "Who can benefit from EduTube?",
     answer:
       "Students, teachers, researchers, and lifelong learners who want to save time and learn smarter by turning long videos into clear summaries and study-friendly formats.",
   },

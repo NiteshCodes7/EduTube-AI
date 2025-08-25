@@ -101,7 +101,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7 }}
           className="mt-8 text-base sm:text-lg md:text-xl text-white max-w-2xl"
         >
-          Paste a YouTube link and let EduTube AI turn hours of content into
+          Paste a YouTube link and let EduTube turn hours of content into
           minutes of insights with summaries, transcripts, and exports.
         </motion.p>
 

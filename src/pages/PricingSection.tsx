@@ -97,11 +97,11 @@ const PricingSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-40 lg:items-end">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20 md:mb-40 lg:items-end">
         {pricingPlans.map((plan) => (
           <Card
             key={plan.name}
-            className={`p-6 w-sm ${
+            className={`p-2 w-xs md:p-6 md:w-sm ${
               plan.name === "Pro"
                 ? "bg-black text-white"
                 : "bg-white text-black"
@@ -117,7 +117,7 @@ const PricingSection = () => {
               <div className="flex justify-between items-center">
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 {plan.name === "Pro" ? (
-                  <Badge className="bg-gradient-to-r from-[#DD7DFF] via-[#E1CD86] via-29% via-[#8BCB92] via-51% via-[#71C2EF] via-76% to-[#3BFFFF] bg-clip-text text-transparent border border-gray-700 p-2">
+                  <Badge className="bg-gradient-to-r from-[#DD7DFF] via-[#E1CD86] via-29% via-[#8BCB92] via-51% via-[#71C2EF] via-76% to-[#3BFFFF] bg-clip-text text-transparent border border-gray-700 p-2 animate-shimmer">
                     Most Popular
                   </Badge>
                 ) : null}
@@ -131,7 +131,7 @@ const PricingSection = () => {
             </CardHeader>
             <CardContent>
               <Button
-                className={`w-full cursor-pointer ${
+                className={`w-full cursor-pointer mb-5 ${
                   plan.name === "Pro"
                     ? "bg-white text-black hover:bg-gray-200"
                     : "bg-black text-white"

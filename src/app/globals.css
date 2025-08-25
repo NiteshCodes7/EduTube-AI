@@ -143,6 +143,23 @@
   animation: wiggleScale 1.5s ease-in-out infinite;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -150% center;
+  }
+  50% {
+    background-position: 150% center;
+  }
+  100% {
+    background-position: -150% center;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 4.5s linear infinite;
+}
+
 
 
 @layer base {

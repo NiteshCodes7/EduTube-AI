@@ -14,7 +14,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "EduTube AI",
+  title: "EduTube",
   description: "Create Youtube Video Summaries just in one click.",
 };
 
