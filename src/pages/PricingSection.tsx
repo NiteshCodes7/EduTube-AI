@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export type Plan = {
   name: string;
@@ -64,8 +66,31 @@ export const pricingPlans: Plan[] = [
 ];
 
 const PricingSection = () => {
+  const router = useRouter();
+  const[loggedIn, setLoggedIn] = useState(false);
+
+  const checkAuth = async () => {
+    try {
+      const res = await axios.get("/api/check-auth", {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        setLoggedIn(true);
+      }
+    } catch (error) {
+      console.log("User not found", error);
+      router.push("sign-up");
+    }
+  }
+
   function handleSubscribe(razorpayPlanId: string): void {
-    //API Call
+    checkAuth();
+    if(razorpayPlanId === "plan_free"){
+      if(!loggedIn) router.push("/dashboard");
+      else router.push("/sign-in");
+    }else{
+      //Api call
+    }
   }
 
   return (

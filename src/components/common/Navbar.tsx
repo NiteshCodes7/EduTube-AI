@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu } from "lucide-react";
+import { ArrowRight, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -34,7 +34,9 @@ interface User {
 const Navbar = () => {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   const checkAuth = async () => {
@@ -45,9 +47,14 @@ const Navbar = () => {
       if (res.status === 200) {
         setLoggedIn(true);
         setUser(res.data.user);
+      }else if(res.status === 401){
+        setLoggedIn(false);
       }
     } catch (error) {
+      setLoggedIn(false);
       console.log("User not found", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,14 +67,24 @@ const Navbar = () => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+  console.log("Navbar state changed =>", { loggedIn, user });
+}, [loggedIn, user]);
+
+
   const handleLogOut = async () => {
     try {
-      const res = await axios.post("/api/logout");
+      const res = await axios.post(
+        "/api/logout",
+        {},
+        { withCredentials: true }
+      );
       if (res.status === 200) {
         setLoggedIn(false);
         setUser(null);
         toast(res.data.message);
-        router.push("/sign-in");
+        setOpen(false);
+        router.push("/");
         router.refresh();
       }
     } catch (error) {
@@ -75,6 +92,8 @@ const Navbar = () => {
       console.error(error);
     }
   };
+
+  if (loading) return null;
 
   return (
     <section className="bg-transparent fixed top-0 left-0 w-full backdrop-blur-lg z-50 p-2">
@@ -104,115 +123,95 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Nav */}
-        {loggedIn ? (
-          <div className="hidden md:flex justify-between items-center space-x-16">
-            <Link
-              href={"/"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Home
-            </Link>
-            <Link
-              href={"/dashboard"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href={"/#features"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Features
-            </Link>
-            <Link
-              href={"/#pricing"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Pricing
-            </Link>
-            <Link
-              href={"/#faq"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              FAQ
-            </Link>
-          </div>
-        ) : (
-          <div className="hidden md:flex justify-between items-center space-x-16">
-            <Link
-              href={"/"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Home
-            </Link>
-            <Link
-              href={"/#features"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Features
-            </Link>
-            <Link
-              href={"/#pricing"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              Pricing
-            </Link>
-            <Link
-              href={"/#faq"}
-              className="text-white hover:text-blue-400 transition"
-            >
-              FAQ
-            </Link>
-          </div>
-        )}
+        <div className="hidden md:flex justify-between items-center space-x-16">
+          <Link
+            href={"/"}
+            className="text-white hover:text-blue-400 transition"
+          >
+            Home
+          </Link>
+          <Link
+            href={"/#features"}
+            className="text-white hover:text-blue-400 transition"
+          >
+            Features
+          </Link>
+          <Link
+            href={"/#pricing"}
+            className="text-white hover:text-blue-400 transition"
+          >
+            Pricing
+          </Link>
+          <Link
+            href={"/#faq"}
+            className="text-white hover:text-blue-400 transition"
+          >
+            FAQ
+          </Link>
+        </div>
 
         {/* Desktop Buttons */}
-        {loggedIn ? (
-          <div className="hidden md:flex relative">
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                {user?.avatar ? (
-                  <Image
-                    src={user.avatar}
-                    alt="user"
-                    width={32}
-                    height={32}
-                    className="rounded-full cursor-pointer"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center w-8 h-8 bg-gray-600 rounded-full text-white cursor-pointer">
-                    {name}
-                  </div>
-                )}
-              </DropdownMenuTrigger>
+        {loggedIn && user ? (
+          <div className="flex items-center gap-2.5">
+            <div className="hidden md:flex relative">
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  {user?.avatar ? (
+                    <Image
+                      src={user.avatar}
+                      alt="user"
+                      width={32}
+                      height={32}
+                      className="rounded-full cursor-pointer"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] rounded-full text-white cursor-pointer">
+                      {name}
+                    </div>
+                  )}
+                </DropdownMenuTrigger>
 
-              <DropdownMenuContent
-                side="bottom"
-                align="end"
-                sideOffset={8}
-                className="w-56"
-              >
-                <DropdownMenuArrow className="fill-white" />
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {user?.full_name && <DropdownMenuItem>{user?.full_name}</DropdownMenuItem>}
-                <DropdownMenuItem>{user?.email}</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant={"destructive"}
-                  onClick={handleLogOut}
-                  className="text-red-600 cursor-pointer hover:bg-rose-50"
+                <DropdownMenuContent
+                  side="bottom"
+                  align="end"
+                  sideOffset={8}
+                  className="w-56"
                 >
-                  <LogOut className="w-4 h-4 mr-2" /> Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuArrow className="fill-white" />
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {user?.full_name && (
+                    <DropdownMenuItem>{user?.full_name}</DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem>{user?.email}</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant={"destructive"}
+                    onClick={handleLogOut}
+                    className="text-red-600 cursor-pointer hover:bg-rose-50"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <Button
+              size="sm"
+              className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+              onClick={() => router.push("/dashboard")}
+            >
+              <span className="flex justify-center items-center gap-2 relative z-10">
+                Go to App <ArrowRight />
+              </span>
+              <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
+            </Button>
           </div>
         ) : (
           <div className="hidden md:flex gap-3">
             <Button
               size="sm"
               variant="outline"
+              className="cursor-pointer"
               onClick={() => router.push("/sign-in")}
             >
               Login
@@ -230,13 +229,13 @@ const Navbar = () => {
 
         {/* Mobile Hamburger */}
         <div className="md:hidden p-3">
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Menu className="text-white w-8 h-8 cursor-pointer" />
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="bg-transparent backdrop-blur-2xl text-white w-[80%] sm:w-[60%] p-6"
+              className="bg-transparent backdrop-blur-2xl text-white w-[80%] sm:w-[60%] p-6 flex flex-col"
             >
               {/* Header with Logo + Close */}
               <SheetHeader className="flex justify-between items-center border-b border-white/20 pb-4">
@@ -252,13 +251,10 @@ const Navbar = () => {
               </SheetHeader>
 
               {/* Mobile Nav Links */}
-              {loggedIn ? (
+              {loggedIn && user ? (
                 <nav className="flex flex-col gap-6 mt-6 text-lg font-medium">
                   <SheetClose asChild>
                     <Link href="/">Home</Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href="/dashboard">Dashboard</Link>
                   </SheetClose>
                   <SheetClose asChild>
                     <Link href="/#features">Features</Link>
@@ -268,6 +264,18 @@ const Navbar = () => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link href="/#faq">FAQ</Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button
+                      size="sm"
+                      className="relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg border-none outline-none hover:opacity-90 transition cursor-pointer w-full mt-2"
+                      onClick={() => router.push("/dashboard")}
+                    >
+                      <span className="flex justify-center items-center gap-2 relative z-10">
+                        Go to App <ArrowRight />
+                      </span>
+                      <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
+                    </Button>
                   </SheetClose>
                 </nav>
               ) : (
@@ -291,56 +299,69 @@ const Navbar = () => {
               <div className="h-px bg-white/20 my-6" />
 
               {/* Mobile Buttons */}
-              <div className="flex flex-col gap-4">
-                {!loggedIn ? (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full text-black"
-                      onClick={() => router.push("/sign-in")}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
-                      onClick={() => router.push("/sign-up")}
-                    >
-                      <span className="relative z-10">Sign Up</span>
-                      <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex gap-3">
-                      {user?.avatar ? (
-                        <Image
-                          src={user.avatar}
-                          alt="user"
-                          width={25}
-                          height={25}
-                        />
-                      ) : (
-                        <div className="text-sm rounded-full text-gray-300">
-                          {name ?? "User"}
-                        </div>
+              {!loggedIn ? (
+                <div className="flex flex-col gap-4">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full text-black cursor-pointer"
+                    onClick={() => router.push("/sign-in")}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                    onClick={() => router.push("/sign-up")}
+                  >
+                    <span className="relative z-10">Sign Up</span>
+                    <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col justify-end h-full">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-4 items-center">
+                      {user && (
+                        <>
+                          {user?.avatar ? (
+                            <Image
+                              src={user.avatar}
+                              alt="user"
+                              width={25}
+                              height={25}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <div className="text-sm rounded-full w-9 h-9 flex items-center justify-center bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white">
+                              {name ?? "U"}
+                            </div>
+                          )}
+                          <div className="flex flex-col">
+                            {user?.full_name && (
+                              <p className="text-gray-400 text-sm">
+                                {user.full_name}
+                              </p>
+                            )}
+                            <p className="text-gray-400 text-sm">
+                              {user?.email}
+                            </p>
+                          </div>
+                        </>
                       )}
-
-                      <p className="text-gray-400 text-sm">{user?.email}</p>
                     </div>
 
                     <Button
                       size="sm"
                       variant="destructive"
                       className="w-full"
-                      onClick={() => console.log("Logout logic here")}
+                      onClick={handleLogOut}
                     >
-                      Logout
+                      <LogOut className="mr-2" /> Logout
                     </Button>
-                  </>
-                )}
-              </div>
+                  </div>
+                </div>
+              )}
             </SheetContent>
           </Sheet>
         </div>

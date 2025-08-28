@@ -64,7 +64,7 @@ export default function OtpInput({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-[90%] sm:max-w-sm md:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Verify OTP</DialogTitle>
+          <DialogTitle >Verify OTP</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground mb-4">
           Enter the 6-digit OTP sent to <strong>{email}</strong>.

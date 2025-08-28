@@ -1,10 +1,28 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const router = useRouter();
+
+  const handleTry = async () => {
+    try {
+      const res = await axios.get("/api/check-auth", {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.log("User not found", error);
+      router.push("sign-up");
+    }
+  }
+
   return (
     <section
       className="relative w-full h-screen bg-white z-40"
@@ -116,6 +134,7 @@ export default function HeroSection() {
             size="lg"
             variant="outline"
             className="rounded-sm px-6 cursor-pointer"
+            onClick={handleTry}
           >
             Try Free Now
           </Button>
