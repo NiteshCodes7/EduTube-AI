@@ -47,8 +47,6 @@ const Navbar = () => {
       if (res.status === 200) {
         setLoggedIn(true);
         setUser(res.data.user);
-      }else if(res.status === 401){
-        setLoggedIn(false);
       }
     } catch (error) {
       setLoggedIn(false);
@@ -67,11 +65,6 @@ const Navbar = () => {
     checkAuth();
   }, []);
 
-  useEffect(() => {
-  console.log("Navbar state changed =>", { loggedIn, user });
-}, [loggedIn, user]);
-
-
   const handleLogOut = async () => {
     try {
       const res = await axios.post(
@@ -82,9 +75,9 @@ const Navbar = () => {
       if (res.status === 200) {
         setLoggedIn(false);
         setUser(null);
-        toast(res.data.message);
         setOpen(false);
-        router.push("/");
+        toast(res.data.message);
+        router.push("/sign-in");
         router.refresh();
       }
     } catch (error) {

@@ -86,7 +86,7 @@ export default function OtpInput({
           <Button
             disabled={otp.length !== 6}
             onClick={handleSubmit}
-            className="cursor-pointer bg-customPurple"
+            className="cursor-pointer bg-customPurple hover:bg-customPurple/60"
           >
             Verify
           </Button>
