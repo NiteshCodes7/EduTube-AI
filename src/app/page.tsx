@@ -2,7 +2,6 @@ import Navbar from "@/components/common/Navbar";
 import HeroSection from "@/pages/HeroSection";
 import MessageSection from "@/pages/MessageSection";
 import GridSection from "@/pages/GridSection";
-import PricingSection from "@/pages/PricingSection";
 import FaqSection from "@/pages/FaqSection";
 import GetAccessSection from "@/pages/GetAccessSection";
 import Footer from "@/components/common/Footer";
@@ -21,9 +20,6 @@ export default function Home() {
 
       {/* GridSection */}
       <GridSection />
-
-      {/* PricingSection */}
-      <PricingSection />
 
       {/* FaqSection */}
       <FaqSection />

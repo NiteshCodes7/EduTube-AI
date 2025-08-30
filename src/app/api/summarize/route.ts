@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     const prompt = `
       You are an assistant that processes YouTube transcripts. 
-      1. Write a summary (max 200 words).
+      1. Write a summary in clear bullet points (each starting with "-"). Keep it concise (max 10 points).
       2. Then produce a mind map JSON in this schema:
 
       {
@@ -65,16 +65,16 @@ export async function POST(req: NextRequest) {
       }
 
       Rules:
-      - Do NOT add Markdown or backticks.
-      - First output must start with "Summary:" then the summary.
+      - Do NOT add Markdown, backticks, or extra formatting.
+      - First output must start with "Summary:" then bullet points.
       - Then on a new line write "MindMap:" followed only by valid JSON.
 
       Transcript:
       ${transcriptText}
-      `;
+    `;
 
     const aiResponse = await ai
-      .getGenerativeModel({ model: "gemini-2.5-pro" })
+      .getGenerativeModel({ model: "gemini-2.5-flash" })
       .generateContent(prompt);
 
     const textResponse = aiResponse.response.text();
@@ -82,7 +82,14 @@ export async function POST(req: NextRequest) {
     const summaryMatch = textResponse.match(/Summary:\s*([\s\S]*?)\nMindMap:/);
     const mindmapMatch = textResponse.match(/MindMap:\s*([\s\S]*)/);
 
-    const summary = summaryMatch ? summaryMatch[1].trim() : "";
+    // Split summary into array of bullet points
+    const summary = summaryMatch
+      ? summaryMatch[1]
+          .split("\n")
+          .map((line) => line.replace(/^-\s*/, "").trim())
+          .filter((line) => line.length > 0)
+      : [];
+
     let mindmap = { topic: "Error parsing MindMap", subtopics: [] };
 
     if (mindmapMatch) {
@@ -98,7 +105,6 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ summary, mindmap });
-    
   } catch (err: any) {
     console.error("API Error:", err.response?.data || err.message);
     return NextResponse.json(

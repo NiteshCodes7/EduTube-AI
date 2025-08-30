@@ -3,9 +3,9 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, LogOut, Menu } from "lucide-react";
+import { ArrowRight, DownloadCloud, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import {
   Sheet,
@@ -31,8 +31,9 @@ interface User {
   avatar?: string;
 }
 
-const Navbar = () => {
+export default function Navbar({ handleDownloadSummary }: { handleDownloadSummary?: () => void }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -130,12 +131,6 @@ const Navbar = () => {
             Features
           </Link>
           <Link
-            href={"/#pricing"}
-            className="text-white hover:text-blue-400 transition"
-          >
-            Pricing
-          </Link>
-          <Link
             href={"/#faq"}
             className="text-white hover:text-blue-400 transition"
           >
@@ -146,6 +141,29 @@ const Navbar = () => {
         {/* Desktop Buttons */}
         {loggedIn && user ? (
           <div className="flex items-center gap-2.5">
+            {pathname === "/dashboard" ? (
+              <Button
+                size="sm"
+                className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                onClick={handleDownloadSummary}
+              >
+                <span className="flex justify-center items-center gap-2 relative z-10">
+                  <DownloadCloud className="text-white" />Download PDF
+                </span>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                onClick={() => router.push("/dashboard")}
+              >
+                <span className="flex justify-center items-center gap-2 relative z-10">
+                  Go to App <ArrowRight />
+                </span>
+                <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
+              </Button>
+            )}
+
             <div className="hidden md:flex relative">
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
@@ -158,7 +176,7 @@ const Navbar = () => {
                       className="rounded-full cursor-pointer"
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] rounded-full text-white cursor-pointer">
+                    <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-customPurple to-[#3B82F6] rounded-full text-white cursor-pointer">
                       {name}
                     </div>
                   )}
@@ -188,16 +206,6 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <Button
-              size="sm"
-              className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
-              onClick={() => router.push("/dashboard")}
-            >
-              <span className="flex justify-center items-center gap-2 relative z-10">
-                Go to App <ArrowRight />
-              </span>
-              <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
-            </Button>
           </div>
         ) : (
           <div className="hidden md:flex gap-3">
@@ -362,5 +370,3 @@ const Navbar = () => {
     </section>
   );
 };
-
-export default Navbar;

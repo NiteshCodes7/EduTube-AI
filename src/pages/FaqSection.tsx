@@ -13,7 +13,7 @@ const FaqSection = () => {
       className="flex justify-center items-center h-auto py-12 sm:py-16 px-4 sm:px-6 text-white"
       style={{
         background:
-          "linear-gradient(to bottom, #2B1452 0%, #2B1452 30%, #000000 100%)",
+          "linear-gradient(to bottom, #5D2CA8 0%, #5D2CA8 10%, #000000 100%)",
       }}
     >
       <div className="w-full max-w-5xl mx-auto">

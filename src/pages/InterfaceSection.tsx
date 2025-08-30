@@ -20,9 +20,12 @@ const InterfaceSection = () => {
           src="/assets/AppSS.png"
           alt="preview"
           width={1000}
-          height={1000}
-          className="w-[80%] h-[200px] md:w-full md:h-[678px] rounded-lg shadow-none drop-shadow-[0_0_10px_rgba(0,0,0,0.6)]"
+          height={600}
+          priority
+          quality={100}
+          className="w-[80%] md:w-[900px] h-auto rounded-lg shadow-none drop-shadow-[0_0_10px_rgba(0,0,0,0.6)]"
         />
+
     </div>
   );
 };
