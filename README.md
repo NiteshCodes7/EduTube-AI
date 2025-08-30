@@ -1,6 +1,6 @@
 # 🧠 Edutube AI
 
-<p align="center"> <img src="public/assets/logo.png" alt="Edutube AI Logo" width="120" /> </p> 
+<p align="center"> <img src="public/assets/EdutubeLogoDekstop.png alt="Edutube AI Logo" width="120" /> </p> 
 
 <p align="center"> <strong>Summarize YouTube videos in seconds with AI-powered Mind Mapping!</strong><br /> Edutube AI is an intelligent, intuitive web app that transforms YouTube video content into organized, visual mindmaps and concise notes within seconds. Built with Next.js, ReactFlow, and MongoDB, it helps learners, students, and professionals save time while retaining knowledge efficiently. </p>
 
