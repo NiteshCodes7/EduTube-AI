@@ -56,8 +56,6 @@ const Mindmap = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
   downloadSummary: () => {
-    const summaryPoints: (string | string[])[] = [];
-
     if (summaryPoints.length === 0) {
       toast("No summary to download yet!");
       return;
