@@ -120,7 +120,7 @@ export default function ChatNode(props: NodeProps<any>) {
             </div>
           </div>
         ) : (
-          <div
+          <ScrollArea
             className="flex flex-col gap-4 cursor-default"
             onWheel={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
@@ -131,7 +131,7 @@ export default function ChatNode(props: NodeProps<any>) {
             onPointerUp={(e) => e.stopPropagation()}
           >
             {conversation.map((msg, idx) => (
-              <div key={idx} className="flex gap-3 items-start">
+              <div key={idx} className="flex gap-3 items-start mb-4">
                 <Avatar className="w-8 h-8">
                   <AvatarFallback
                     className={
@@ -151,7 +151,7 @@ export default function ChatNode(props: NodeProps<any>) {
                   }`}
                 >
                   {Array.isArray(msg.message) ? (
-                    <ul className="list-disc list-inside space-y-1">
+                    <ul className="list-disc list-inside space-y-2">
                       {msg.message.map((point, i) => (
                         <li key={i}>{point}</li>
                       ))}
@@ -177,7 +177,7 @@ export default function ChatNode(props: NodeProps<any>) {
                 </div>
               </div>
             )}
-          </div>
+          </ScrollArea>
         )}
       </div>
 
