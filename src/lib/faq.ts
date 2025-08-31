@@ -1,32 +1,37 @@
 export const faqList = [
   {
-    question: "What is EduTube?",
+    question: "What is EduTube AI?",
     answer:
-      "EduTube is an AI-powered YouTube summarizer that helps students, educators, and professionals quickly extract key insights, mind maps, and study notes from any video.",
+      "EduTube AI is an AI-powered tool that summarizes YouTube videos in seconds and converts them into interactive mindmaps and concise study notes.",
   },
   {
-    question: "Is EduTube free to use?",
+    question: "Who can use EduTube AI?",
     answer:
-      "Yes! We offer a Free plan with limited daily summaries and essential features. For unlimited usage and advanced tools, you can upgrade to our paid plans.",
+      "Students, educators, researchers, and lifelong learners can use EduTube AI to save time and grasp key insights from long videos quickly.",
   },
   {
-    question: "Who can benefit from EduTube?",
+    question: "How does EduTube AI work?",
     answer:
-      "Students, teachers, researchers, and lifelong learners who want to save time and learn smarter by turning long videos into clear summaries and study-friendly formats.",
+      "Simply provide a YouTube video link, and our AI extracts the main points, generating a summary and an interactive mindmap for easy understanding.",
   },
   {
-    question: "How accurate are the summaries?",
+    question: "Are the summaries accurate?",
     answer:
-      "Our summaries are powered by advanced AI models. While they capture the main points reliably, we always recommend cross-checking for complete accuracy in academic or professional use.",
+      "Our AI-powered summaries capture the main points reliably. For academic or professional purposes, we recommend reviewing the original content as well.",
   },
   {
-    question: "Can I cancel my subscription anytime?",
+    question: "Can I export my mindmaps?",
     answer:
-      "Yes, you can cancel your subscription at any time. You will continue to have access to premium features until the end of your billing cycle.",
+      "Yes! You can export your mindmaps as PDFs to save, share, or study offline.",
   },
   {
-    question: "Which payment methods are supported?",
+    question: "Do I need an account to use EduTube AI?",
     answer:
-      "We support all major credit/debit cards, UPI, and wallets via Razorpay for smooth and secure payments.",
+      "Yes, creating an account is required to access the full features of EduTube AI, including saving, managing, and exporting your mindmaps.",
+  },
+  {
+    question: "Is this the final version of EduTube AI?",
+    answer:
+      "This is the starting version! More features, improvements, and a subscription plan with advanced tools will be added in future updates.",
   },
 ];

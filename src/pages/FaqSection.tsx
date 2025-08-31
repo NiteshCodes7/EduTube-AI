@@ -30,7 +30,7 @@ const FaqSection = () => {
               <div
                 key={idx}
                 onClick={() => (id === idx ? setId(null) : setId(idx))}
-                className="border-b border-gray-700 pb-3 sm:pb-4 cursor-pointer"
+                className="border-b border-gray-500 pb-3 sm:pb-4 cursor-pointer"
               >
                 <div className="flex justify-between items-center">
                   <h3 className="text-base sm:text-lg md:text-xl font-semibold">

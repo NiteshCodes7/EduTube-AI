@@ -59,7 +59,7 @@ export default function ChatNode(props: NodeProps<any>) {
   
 
   return (
-    <div className="bg-black border-t-purple-500 border-t-6 border border-gray-600 text-white rounded-lg p-4 w-[400px] h-[800px] shadow-lg flex flex-col">
+    <div className="bg-black mt-16 border-t-purple-500 border-t-6 border border-gray-600 text-white rounded-lg p-4 w-[400px] h-[800px] shadow-lg flex flex-col">
       {/* Handles for connections */}
       <Handle
         type="target"

@@ -8,7 +8,7 @@ const GetAccessSection = () => {
     <section className="relative flex justify-center items-center min-h-[25rem] sm:min-h-[28rem] md:min-h-[30rem] bg-black text-white px-4 sm:px-6">
       <div className="flex flex-col gap-4 sm:gap-6 w-full max-w-2xl text-center z-30">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-          Get Free Access
+          Get Beta Access
         </h2>
 
         <p className="text-gray-400 text-sm sm:text-base max-w-lg mx-auto">

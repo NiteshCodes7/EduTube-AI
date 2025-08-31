@@ -7,13 +7,13 @@ const GridSection = () => {
     {
       id: 1,
       title: "AI-Powered Summaries",
-      description: "Get concise summaries, transcripts, and key insights in seconds.",
+      description: "Get concise summaries, mind maps, and key insights in seconds.",
       icon: Brain,
     },
     {
       id: 2,
       title: "Export & Share",
-      description: "Download summaries as PDF, text, or mind map.",
+      description: "Download summaries as PDF, or visualise mind map.",
       icon: Share,
     },
     {

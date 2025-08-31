@@ -11,13 +11,17 @@
 - 🔐 **Authentication** – Secure login & signup flow  
 - 🗺️ **Mindmap Builder** – Drag-and-drop nodes, powered by ReactFlow  
 - 📝 **AI Summarization** – Convert conversations into concise notes  
-- 📄 **PDF Export** – Save your mindmaps as shareable PDFs  
+- 📄 **PDF Export** – Save your Summary as shareable PDFs  
 - 📊 **Dashboard** – Access and manage your saved mindmaps  
 - 🎨 **Beautiful UI** – Tailored with Tailwind CSS & shadcn/ui  
 
 ---
 
 ## 🖼️ Screenshots
+
+<p align="center">
+  <img src="public/assets/AppSS2.png" alt="App Screenshot" width="700" />
+</p>
 
 <p align="center">
   <img src="public/assets/AppSS.png" alt="App Screenshot" width="700" />

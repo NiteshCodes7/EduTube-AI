@@ -1,9 +1,5 @@
 "use client";
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import ReactFlow, {
   Node,
   useNodesState,
@@ -17,6 +13,7 @@ import "reactflow/dist/style.css";
 import ChatNode from "./ChatNode";
 import { buildMindMap } from "@/lib/buildMindMap";
 import jsPDF from "jspdf";
+import { toast } from "sonner";
 
 const nodeTypes: { [key: string]: React.ComponentType<NodeProps> } = {
   chatNode: ChatNode,
@@ -57,35 +54,34 @@ const Mindmap = forwardRef((props, ref) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useImperativeHandle(ref, () => ({
-  downloadSummary: () => {
-    if (summaryPoints.length === 0) {
-      alert("No summary to download yet.");
-      return;
-    }
-
-    const doc = new jsPDF();
-    doc.setFontSize(14);
-    doc.text("Mindmap Summary", 10, 10);
-
-    let y = 20;
-    summaryPoints.forEach((point, idx) => {
-      const lines = doc.splitTextToSize(`${idx + 1}. ${point}`, 180);
-      doc.text(lines, 10, y);
-      y += lines.length * 8;
-
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
+    downloadSummary: () => {
+      if (summaryPoints.length === 0) {
+        toast("No summary to download yet!");
+        return;
       }
-    });
 
-    doc.save("mindmap-summary.pdf");
-  },
-}));
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Mindmap Summary", 10, 10);
 
+      let y = 20;
+      summaryPoints.forEach((point) => {
+        const lines = doc.splitTextToSize(`• ${point}`, 180);
+        doc.text(lines, 10, y);
+        y += lines.length * 8;
+
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save("mindmap-summary.pdf");
+    },
+  }));
 
   return (
-    <div className="w-screen h-screen bg-black">
+    <div className="flex justify-center items-center w-screen h-screen bg-black">
       <ReactFlowProvider>
         <ReactFlow
           zoomOnDoubleClick
