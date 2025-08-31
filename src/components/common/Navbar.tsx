@@ -3,7 +3,14 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, DownloadCloud, FileDown, LogOut, Menu } from "lucide-react";
+import {
+  ArrowRight,
+  DownloadCloud,
+  FileDown,
+  Loader2,
+  LogOut,
+  Menu,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
@@ -91,8 +98,6 @@ export default function Navbar({
     }
   };
 
-  if (loading) return null;
-
   return (
     <section className="bg-transparent fixed top-0 left-0 w-full backdrop-blur-lg z-50 p-2">
       <div className="flex justify-between items-center px-4 mx-auto">
@@ -143,95 +148,99 @@ export default function Navbar({
         </div>
 
         {/* Desktop Buttons */}
-        {loggedIn && user ? (
-          <div className="flex items-center gap-2.5">
-            {pathname === "/dashboard" ? (
+        <div>
+          {loading ? (
+            <p className="flex justify-center items-center text-gray-300 text-sm"><Loader2 className="text-gray-300 animate-spin" /> Fetching User Details...</p>
+          ) : loggedIn && user ? (
+            <div className="flex items-center gap-2.5">
+              {pathname === "/dashboard" ? (
+                <Button
+                  size="sm"
+                  className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                  onClick={handleDownloadSummary}
+                >
+                  <span className="flex justify-center items-center gap-2 relative z-10">
+                    <DownloadCloud className="text-white" />
+                    Download PDF
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                  onClick={() => router.push("/dashboard")}
+                >
+                  <span className="flex justify-center items-center gap-2 relative z-10">
+                    Go to App <ArrowRight />
+                  </span>
+                  <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
+                </Button>
+              )}
+
+              {/* User Dropdown */}
+              <div className="hidden md:flex relative">
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    {user?.avatar ? (
+                      <Image
+                        src={user.avatar}
+                        alt="user"
+                        width={32}
+                        height={32}
+                        className="rounded-full cursor-pointer"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-customPurple to-[#3B82F6] rounded-full text-white cursor-pointer">
+                        {name}
+                      </div>
+                    )}
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent
+                    side="bottom"
+                    align="end"
+                    sideOffset={8}
+                    className="w-56"
+                  >
+                    <DropdownMenuArrow className="fill-white" />
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {user?.full_name && (
+                      <DropdownMenuItem>{user?.full_name}</DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem>{user?.email}</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogOut}
+                      className="text-red-600 cursor-pointer hover:bg-rose-50"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" /> Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          ) : (
+            <div className="hidden md:flex gap-3">
               <Button
                 size="sm"
-                className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
-                onClick={handleDownloadSummary}
+                variant="outline"
+                className="cursor-pointer"
+                onClick={() => router.push("/sign-in")}
               >
-                <span className="flex justify-center items-center gap-2 relative z-10">
-                  <DownloadCloud className="text-white" />
-                  Download PDF
-                </span>
+                Login
               </Button>
-            ) : (
               <Button
                 size="sm"
-                className="hidden md:flex relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
-                onClick={() => router.push("/dashboard")}
+                className="relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
+                onClick={() => router.push("/sign-up")}
               >
-                <span className="flex justify-center items-center gap-2 relative z-10">
-                  Go to App <ArrowRight />
-                </span>
+                <span className="relative z-10">Sign Up</span>
                 <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
               </Button>
-            )}
-
-            <div className="hidden md:flex relative">
-              <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                  {user?.avatar ? (
-                    <Image
-                      src={user.avatar}
-                      alt="user"
-                      width={32}
-                      height={32}
-                      className="rounded-full cursor-pointer"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-customPurple to-[#3B82F6] rounded-full text-white cursor-pointer">
-                      {name}
-                    </div>
-                  )}
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent
-                  side="bottom"
-                  align="end"
-                  sideOffset={8}
-                  className="w-56"
-                >
-                  <DropdownMenuArrow className="fill-white" />
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {user?.full_name && (
-                    <DropdownMenuItem>{user?.full_name}</DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem>{user?.email}</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    variant={"destructive"}
-                    onClick={handleLogOut}
-                    className="text-red-600 cursor-pointer hover:bg-rose-50"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" /> Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
-          </div>
-        ) : (
-          <div className="hidden md:flex gap-3">
-            <Button
-              size="sm"
-              variant="outline"
-              className="cursor-pointer"
-              onClick={() => router.push("/sign-in")}
-            >
-              Login
-            </Button>
-            <Button
-              size="sm"
-              className="relative overflow-hidden bg-gradient-to-r from-[#5D2CA8] to-[#3B82F6] text-white px-4 py-3 rounded-lg font-semibold shadow-lg hover:opacity-90 transition cursor-pointer"
-              onClick={() => router.push("/sign-up")}
-            >
-              <span className="relative z-10">Sign Up</span>
-              <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="md:hidden flex justify-center items-center gap-2">
           <div className="md:hidden">
@@ -252,12 +261,13 @@ export default function Navbar({
                 onClick={() => router.push("/dashboard")}
               >
                 <span className="text-xs flex justify-center items-center gap-2 relative z-10">
-                  Go to App <ArrowRight className="text-white text-xs"/>
+                  Go to App <ArrowRight className="text-white text-xs" />
                 </span>
                 <span className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
               </Button>
             )}
           </div>
+
           {/* Mobile Hamburger */}
           <div className="md:hidden p-3">
             <Sheet open={open} onOpenChange={setOpen}>
@@ -288,9 +298,6 @@ export default function Navbar({
                   </SheetClose>
                   <SheetClose asChild>
                     <Link href="/#features">Features</Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href="/#pricing">Pricing</Link>
                   </SheetClose>
                   <SheetClose asChild>
                     <Link href="/#faq">FAQ</Link>

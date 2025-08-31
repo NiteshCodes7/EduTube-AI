@@ -26,6 +26,7 @@
     "dagre": "^0.8.5",
     "docx": "^9.5.1",
     "file-saver": "^2.0.5",
+    "franc": "^6.2.0",
     "googleapis": "^159.0.0",
     "input-otp": "^1.4.2",
     "jsonwebtoken": "^9.0.2",

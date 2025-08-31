@@ -6,9 +6,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Handle, NodeProps, Position } from "reactflow";
+import { toast } from "sonner";
 
 interface ChatMessage {
-  message: string;
+  message: string | string[];
   role: "User" | "AI";
 }
 
@@ -25,14 +26,20 @@ export default function ChatNode(props: NodeProps<any>) {
 
   const handleSubmit = async () => {
     if (!url) return;
+
     setConversation((prev) => [...prev, { role: "User", message: url }]);
     setStart(true);
     setLoading(true);
     setThinking(true);
     setUrl("");
 
+    const toastId = toast.loading("⏳ Our AI is summarizing, please wait...");
+
     try {
-      const res = await axios.post("/api/summarize", { url });
+      const res = await axios.post("/api/summarize", {
+        url,
+      });
+
       const aiReply = res.data.summary || "AI Response received!";
       setConversation((prev) => [...prev, { message: aiReply, role: "AI" }]);
 
@@ -46,9 +53,12 @@ export default function ChatNode(props: NodeProps<any>) {
 
       setSummary(points);
 
-      console.log(summary);
+      toast.success("✅ Summary generated successfully!", { id: toastId });
     } catch (err) {
       console.error(err);
+      toast.error("❌ Failed to generate summary. Please check the link", {
+        id: toastId,
+      });
     } finally {
       setLoading(false);
       setThinking(false);
@@ -56,11 +66,8 @@ export default function ChatNode(props: NodeProps<any>) {
     }
   };
 
-  
-
   return (
     <div className="bg-black mt-16 border-t-purple-500 border-t-6 border border-gray-600 text-white rounded-lg p-4 w-[400px] h-[800px] shadow-lg flex flex-col">
-      {/* Handles for connections */}
       <Handle
         type="target"
         position={Position.Left}
@@ -72,11 +79,12 @@ export default function ChatNode(props: NodeProps<any>) {
         style={{ background: "#555" }}
       />
 
-      <h3 className="text-lg text-purple-500 font-bold mb-8">Universal Chat</h3>
+      <h3 className="text-lg text-purple-500 font-bold mb-4">Universal Chat</h3>
 
-      <div className="flex-1 min-h-0">
-        {!start && (
-          <div className="flex justify-center items-center h-full z-0">
+      {/* Chat Messages or Start State */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-2">
+        {!start ? (
+          <div className="flex justify-center items-center h-full">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-lg bg-gray-800 text-white shadow">
                 <p className="text-sm italic">
@@ -111,77 +119,70 @@ export default function ChatNode(props: NodeProps<any>) {
               </div>
             </div>
           </div>
-        )}
-
-        {start && (
-          <ScrollArea
-            className="h-full pr-2 z-50 cursor-default"
-            onWheel={(e) => {
-              e.stopPropagation();
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-            }}
+        ) : (
+          <div
+            className="flex flex-col gap-4 cursor-default"
+            onWheel={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseMove={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onPointerMove={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
           >
-            <div className="flex flex-col gap-4">
-              {conversation.map((msg, idx) => (
-                <div key={idx} className="flex gap-3 items-start">
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback
-                      className={`${
-                        msg.role === "User"
-                          ? "border border-purple-500 bg-black text-purple-500"
-                          : "border border-blue-800 bg-black text-blue-800"
-                      } font-bold`}
-                    >
-                      {msg.role === "User" ? "U" : "AI"}
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div
-                    className={`p-3 rounded-lg max-w-[80%] text-sm ${
+            {conversation.map((msg, idx) => (
+              <div key={idx} className="flex gap-3 items-start">
+                <Avatar className="w-8 h-8">
+                  <AvatarFallback
+                    className={
                       msg.role === "User"
-                        ? "bg-purple-500 text-white"
-                        : "bg-gray-800 text-white"
-                    }`}
+                        ? "border border-purple-500 bg-black text-purple-500"
+                        : "border border-blue-800 bg-black text-blue-800 font-bold"
+                    }
                   >
-                    {Array.isArray(msg.message) ? (
-                      <ul className="list-disc list-inside space-y-1">
-                        {msg.message.map((point, i) => (
-                          <li key={i}>{point}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      msg.message
-                    )}
-                  </div>
+                    {msg.role === "User" ? "U" : "AI"}
+                  </AvatarFallback>
+                </Avatar>
+                <div
+                  className={`p-3 rounded-lg max-w-[80%] text-sm ${
+                    msg.role === "User"
+                      ? "bg-purple-500 text-white"
+                      : "bg-gray-800 text-white"
+                  }`}
+                >
+                  {Array.isArray(msg.message) ? (
+                    <ul className="list-disc list-inside space-y-1">
+                      {msg.message.map((point, i) => (
+                        <li key={i}>{point}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    msg.message
+                  )}
                 </div>
-              ))}
+              </div>
+            ))}
 
-              {thinking && (
-                <div className="flex gap-3 items-start">
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback className="border border-blue-800 bg-black text-blue-800 font-bold">
-                      AI
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div className="p-3 rounded-lg bg-gray-800 text-white text-sm flex gap-1">
-                    <span className="animate-bounce">●</span>
-                    <span className="animate-bounce delay-150">●</span>
-                    <span className="animate-bounce delay-300">●</span>
-                  </div>
+            {thinking && (
+              <div className="flex gap-3 items-start">
+                <Avatar className="w-8 h-8">
+                  <AvatarFallback className="border border-blue-800 bg-black text-blue-800 font-bold">
+                    AI
+                  </AvatarFallback>
+                </Avatar>
+                <div className="p-3 rounded-lg bg-gray-800 text-white text-sm flex gap-1">
+                  <span className="animate-bounce">●</span>
+                  <span className="animate-bounce delay-150">●</span>
+                  <span className="animate-bounce delay-300">●</span>
                 </div>
-              )}
-            </div>
-          </ScrollArea>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
-      <div
-        className="flex justify-center items-center gap-2 mt-2"
-        onMouseDown={(e) => e.stopPropagation()}
-      >
+      {/* Input */}
+      <div className="flex justify-center items-center gap-2 mt-2">
         <Input
           type="text"
           placeholder="Paste YouTube URL..."
@@ -189,18 +190,11 @@ export default function ChatNode(props: NodeProps<any>) {
           onChange={(e) => setUrl(e.target.value)}
           disabled={loading}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit();
-            }
+            if (e.key === "Enter") handleSubmit();
           }}
           className="flex-1 bg-gray-900/40 text-white border-gray-600 z-40"
         />
-        <Button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="text-center cursor-pointer z-40"
-          size={"sm"}
-        >
+        <Button onClick={handleSubmit} disabled={loading} size={"sm"}>
           {loading ? (
             <Loader className="animate-spin text-white" size={18} />
           ) : (

@@ -14,6 +14,21 @@
 - 📄 **PDF Export** – Save your Summary as shareable PDFs  
 - 📊 **Dashboard** – Access and manage your saved mindmaps  
 - 🎨 **Beautiful UI** – Tailored with Tailwind CSS & shadcn/ui  
+- 🌐 **Automatic Language Detection & Summarization** – Edutube AI detects the language of the YouTube video automatically. Summaries are generated in English by default, regardless of the video’s original language.
+
+- 💡 **How It Works**  
+  1. Paste a YouTube URL.  
+  2. AI detects the video’s language automatically.  
+  3. Generates an English summary with bullet points and a mindmap.
+
+---
+
+## 🌟 Why Edutube AI?
+- **Time Efficiency** – Quickly grasp key concepts without watching entire videos.  
+- **Visual Learning** – Mindmaps enhance understanding and retention.  
+- **AI-Powered** – Leverages advanced AI for accurate summarization.  
+- **User-Friendly** – Intuitive interface for all users.  
+- **Free to Use** – Accessible to everyone looking to learn smarter.
 
 ---
 

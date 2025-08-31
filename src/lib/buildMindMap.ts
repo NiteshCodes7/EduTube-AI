@@ -48,7 +48,7 @@ export const buildMindMap = (mindmap: any, sourceId: string) => {
   nodes.push({
     id: mainId,
     type: "default",
-    position: { x: 100, y: 100 },
+    position: { x: 100, y: 0 },
     data: { label: mindmap.topic },
     style: {
       border: "2px solid #FFA500",

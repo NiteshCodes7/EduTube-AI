@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { franc } from 'franc'
 
 const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     const apiHost = process.env.RAPID_API_HOST!;
 
     // Extract videoId
-    const regex = /(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/;
+    const regex = /(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/;
     const match = url.match(regex);
     const videoId = match ? match[1] : null;
     if (!videoId) {
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
     const response = await axios.get(
       "https://youtube-transcripts.p.rapidapi.com/youtube/transcript",
       {
-        params: { url, videoId, chunkSize: "500", text: "false", lang: "en" },
+        params: { url, videoId, chunkSize: "500", text: "false",},
         headers: {
           "x-rapidapi-key": apiKey!,
           "x-rapidapi-host": apiHost!,
@@ -51,9 +52,27 @@ export async function POST(req: NextRequest) {
     // Join transcript
     const transcriptText = data.content.map((c: any) => c.text).join(" ");
 
+    let englishTranscript = transcriptText;
+
+    const langCode = franc(transcriptText);
+
+    if(langCode !== "eng"){
+      const translatePrompt = `
+        Translate the following transcript into English (preserve meaning, keep it simple):
+  
+        ${transcriptText}
+        `;
+
+      const translationResponse = await ai
+        .getGenerativeModel({ model: "gemini-2.5-flash" })
+        .generateContent(translatePrompt);
+    
+      englishTranscript = translationResponse.response.text();
+    }
+
     const prompt = `
       You are an assistant that processes YouTube transcripts. 
-      1. Write a summary in clear bullet points (each starting with "-"). Keep it concise (max 10 points).
+      1. Write a detailed summary in clear bullet points. Include key points, examples, and important explanations. Use 8–12 bullets if possible.
       2. Then produce a mind map JSON in this schema:
 
       {
@@ -70,7 +89,7 @@ export async function POST(req: NextRequest) {
       - Then on a new line write "MindMap:" followed only by valid JSON.
 
       Transcript:
-      ${transcriptText}
+      ${englishTranscript}
     `;
 
     const aiResponse = await ai

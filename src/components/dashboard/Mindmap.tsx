@@ -31,6 +31,7 @@ const Mindmap = forwardRef((props, ref) => {
       id: "chat",
       type: "chatNode",
       position: { x: 50, y: 200 },
+      draggable: true,
       data: {
         onSummary: (points: string[]) => {
           setSummaryPoints(points);
@@ -54,31 +55,52 @@ const Mindmap = forwardRef((props, ref) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useImperativeHandle(ref, () => ({
-    downloadSummary: () => {
-      if (summaryPoints.length === 0) {
-        toast("No summary to download yet!");
-        return;
+  downloadSummary: () => {
+    const summaryPoints: (string | string[])[] = [];
+
+    if (summaryPoints.length === 0) {
+      toast("No summary to download yet!");
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.setFontSize(14);
+    doc.text("Mindmap Summary", 10, 10);
+
+    let y = 20;
+
+    summaryPoints.forEach((point) => {
+      if (typeof point === "string") {
+        const subPoints = point.split(/\*\s*/).map(p => p.trim()).filter(p => p.length > 0);
+
+        subPoints.forEach((p) => {
+          const lines = doc.splitTextToSize(`• ${p}`, 180);
+          doc.text(lines, 10, y);
+          y += lines.length * 8;
+
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+        });
+      } else if (Array.isArray(point)) {
+        point.forEach((p: string) => {
+          const lines = doc.splitTextToSize(`• ${p}`, 180);
+          doc.text(lines, 10, y);
+          y += lines.length * 8;
+
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+        });
       }
+    });
 
-      const doc = new jsPDF();
-      doc.setFontSize(14);
-      doc.text("Mindmap Summary", 10, 10);
+    doc.save("mindmap-summary.pdf");
+  },
+}));
 
-      let y = 20;
-      summaryPoints.forEach((point) => {
-        const lines = doc.splitTextToSize(`• ${point}`, 180);
-        doc.text(lines, 10, y);
-        y += lines.length * 8;
-
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-      });
-
-      doc.save("mindmap-summary.pdf");
-    },
-  }));
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-black">
