@@ -20,7 +20,7 @@ const nodeTypes: { [key: string]: React.ComponentType<NodeProps> } = {
 };
 
 const Mindmap = forwardRef((props, ref) => {
-  const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
+  const [summaryPoints, setSummaryPoints] = useState<(string | string[])[]>([]);
 
   const handleContextMenu = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.preventDefault();
@@ -55,50 +55,52 @@ const Mindmap = forwardRef((props, ref) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useImperativeHandle(ref, () => ({
-  downloadSummary: () => {
-    if (summaryPoints.length === 0) {
-      toast("No summary to download yet!");
-      return;
-    }
-
-    const doc = new jsPDF();
-    doc.setFontSize(14);
-    doc.text("Mindmap Summary", 10, 10);
-
-    let y = 20;
-
-    summaryPoints.forEach((point) => {
-      if (typeof point === "string") {
-        const subPoints = point.split(/\*\s*/).map(p => p.trim()).filter(p => p.length > 0);
-
-        subPoints.forEach((p) => {
-          const lines = doc.splitTextToSize(`• ${p}`, 180);
-          doc.text(lines, 10, y);
-          y += lines.length * 8;
-
-          if (y > 270) {
-            doc.addPage();
-            y = 20;
-          }
-        });
-      } else if (Array.isArray(point)) {
-        point.forEach((p: string) => {
-          const lines = doc.splitTextToSize(`• ${p}`, 180);
-          doc.text(lines, 10, y);
-          y += lines.length * 8;
-
-          if (y > 270) {
-            doc.addPage();
-            y = 20;
-          }
-        });
+    downloadSummary: () => {
+      if (summaryPoints.length === 0) {
+        toast("No summary to download yet!");
+        return;
       }
-    });
 
-    doc.save("mindmap-summary.pdf");
-  },
-}));
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Mindmap Summary", 10, 10);
 
+      let y = 20;
+
+      summaryPoints.forEach((point) => {
+        if (typeof point === "string") {
+          const subPoints = point
+            .split(/\*\s*/)
+            .map((p) => p.trim())
+            .filter((p) => p.length > 0);
+
+          subPoints.forEach((p) => {
+            const lines = doc.splitTextToSize(`• ${p}`, 180);
+            doc.text(lines, 10, y);
+            y += lines.length * 8;
+
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+          });
+        } else if (Array.isArray(point)) {
+          point.forEach((p) => {
+            const lines = doc.splitTextToSize(`• ${p}`, 180);
+            doc.text(lines, 10, y);
+            y += lines.length * 8;
+
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+          });
+        }
+      });
+
+      doc.save("mindmap-summary.pdf");
+    },
+  }));
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-black">
