@@ -2,6 +2,7 @@
 
 import { faqList } from "@/lib/faq";
 import { Minus, Plus } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 
 const FaqSection = () => {
@@ -45,11 +46,19 @@ const FaqSection = () => {
                   </span>
                 </div>
 
-                {check && (
-                  <p className="text-gray-400 text-sm sm:text-base py-2 mt-2 leading-relaxed">
-                    {faq.answer}
-                  </p>
-                )}
+                <AnimatePresence>
+                  {check && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-gray-400 text-sm sm:text-base mt-2 leading-relaxed overflow-hidden"
+                    >
+                      {faq.answer}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}

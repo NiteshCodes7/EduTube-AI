@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { Brain, Share, Database } from "lucide-react";
+import { motion } from "motion/react";
 import InterfaceSection from "./InterfaceSection";
 
 const GridSection = () => {
@@ -29,10 +32,17 @@ const GridSection = () => {
       id="features"
       className="flex flex-col h-auto justify-center items-center py-16 sm:py-20 px-4 sm:px-6"
       style={{
-          background: "linear-gradient(to bottom, #000000 0%, #000000 30%, #5D2CA8 100%)"
+        background: "linear-gradient(to bottom, #000000 0%, #000000 30%, #5D2CA8 100%)",
       }}
     >
-      <div className="flex flex-col items-center text-white max-w-2xl text-center mb-12 sm:mb-20">
+      {/* Heading */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="flex flex-col items-center text-white max-w-2xl text-center mb-12 sm:mb-20"
+      >
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 font-dmSans">
           Everything you need
         </h2>
@@ -41,37 +51,56 @@ const GridSection = () => {
           one place. Set tasks, get reminders, and see your progress simply and
           quickly.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="max-w-7xl w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-          {features.map((feature) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={feature.id}
-                className="bg-black bg-opacity-80 rounded-2xl p-6 sm:p-10 text-center backdrop-blur-md border border-white border-opacity-10 transition-all hover:shadow-lg hover:shadow-purple-500"
-              >
-                {/* Icon */}
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white bg-opacity-10 rounded-xl mx-auto mb-4 sm:mb-6 flex items-center justify-center border border-white">
-                  <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-black" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-4">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-                  {feature.description}
-                </p>
+      {/* Feature Cards */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ staggerChildren: 0.2 }}
+        className="max-w-7xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
+      >
+        {features.map((feature) => {
+          const Icon = feature.icon;
+          return (
+            <motion.div
+              key={feature.id}
+              variants={{
+                hidden: { opacity: 0, y: 40 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              whileHover={{ scale: 1.05 }}
+              className="bg-black bg-opacity-80 rounded-2xl p-6 sm:p-10 text-center backdrop-blur-md border border-white border-opacity-10 hover:shadow-lg hover:shadow-purple-500 transition-all"
+            >
+              {/* Icon */}
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white bg-opacity-10 rounded-xl mx-auto mb-4 sm:mb-6 flex items-center justify-center border border-white">
+                <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-black" />
               </div>
-            );
-          })}
-        </div>
-      </div>
-      <div>
+
+              {/* Content */}
+              <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-4">
+                {feature.title}
+              </h3>
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
+                {feature.description}
+              </p>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {/* Interface Section with entrance motion */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="mt-16 sm:mt-24 w-full"
+      >
         <InterfaceSection />
-      </div>
+      </motion.div>
     </section>
   );
 };
