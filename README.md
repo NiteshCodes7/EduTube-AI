@@ -46,12 +46,12 @@
 
 ## 🛠️ Tech Stack
 
-- ⚡ **Next.js 14** – App Router, SSR  
-- ⚛️ **React 18** – UI components  
+- ⚡ **Next.js 15** – App Router, SSR  
+- ⚛️ **React 19** – UI components  
 - 🎨 **Tailwind CSS + shadcn/ui** – Styling  
 - 🧩 **ReactFlow** – Interactive Mindmaps  
 - 🍃 **MongoDB** – Database  
-- 🔑 **NextAuth.js / Custom Auth** – Authentication  
+- 🔑 **JWT Auth** – Authentication  
 - 📦 **TypeScript** – Type safety  
 
 ---
@@ -74,9 +74,19 @@ yarn install
 ### 3. Set up environment variables
 Create a **.env.local** file:
 ```env
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-MONGODB_URI=your-mongodb-connection
-NEXTAUTH_SECRET=your-secret
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+MONGO_URI=your-mongodb-connection
+JWT_SECRET=your-secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/google/callback
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+GITHUB_REDIRECT_URI=http://localhost:3000/api/github/callback
+GEMINI_API_KEY=your-gemini-api-key
+RAPID_API_KEY=your-rapid-api-key
+RAPID_API_HOST=your-rapid-api-host
+Setup your own email credentials for production use.
 ```
 
 ### 4. Run the development server
